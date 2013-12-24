@@ -11,7 +11,7 @@ are to try to improve control between the LeapMotion device and desktop interact
 from pymouse import PyMouse
 
 mouse = PyMouse()
-screen_width, screen_height = mouse.display.screen_size()
+screen_width, screen_height = mouse.screen_size()
 
 def point_with_finger(normalized_pos):
     posx = normalized_pos.x * screen_width

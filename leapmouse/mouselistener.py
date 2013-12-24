@@ -12,12 +12,11 @@ Set up the class interface to collect the Leap frame data.
 import Leap
 from Leap import KeyTapGesture, ScreenTapGesture
 
-from leapmouse.leapmouse import do_frame_action
-
 class LeapListener(Leap.Listener):
-    def __init__(self):
+    def __init__(self, on_frame_func):
         super(LeapListener, self).__init__()
-        self.should_report = False
+        self.should_continue = False
+        self.on_frame_do = on_frame_func
 
     def on_init(self, controller):
         print "Initialized"
@@ -45,7 +44,12 @@ class LeapListener(Leap.Listener):
         print "Exited"
 
     def on_frame(self, controller):
-        if not self.should_report:
+        """
+        Frame details are gathered here and forwarded to other
+        areas to react based on that data. You could say that the
+        controller drives the application.
+        """
+        if not self.should_continue:
             return
         
         #finger movement
@@ -55,7 +59,7 @@ class LeapListener(Leap.Listener):
         frnt_ptr = frame.pointables.frontmost
         normalized_pos = iBox.normalize_point(frnt_ptr.tip_position)
         
-        do_frame_action(normalized_pos = normalized_pos)
+        self.on_frame_do(normalized_pos = normalized_pos)
          
     def state_to_string(self, state):
         if state == Leap.Gesture.STATE_START:

@@ -10,12 +10,10 @@ Such as moving the mouse cursor, clicking with it, and moving windows. Secondary
 are to try to improve control between the LeapMotion device and desktop interaction.
 """
 
-from __future__ import absolute_import
-
 import sys
 import Leap
-from leapmouse.mouselistener import LeapListener
-from leapmouse.fingerpointer import point_with_finger
+from mouselistener import LeapListener
+from fingerpointer import point_with_finger
 
 def do_frame_action(*args, **kwargs):
     point_with_finger(kwargs.get('normalized_pos'))
@@ -29,14 +27,15 @@ def main():
     5. ???
     6. Profit?
     """
-    listener = LeapListener()
+    listener = LeapListener(do_frame_action)
     controller = Leap.Controller()
-    
+
+    print "Diag info printing.."
     controller.add_listener(listener)
 
-    print "Diag info printing."
+    print "Continue?"
     sys.stdin.readline()
-    listener.should_report = True
+    listener.should_continue = True
     
     #Listen until a keypress
     print "Press Enter to quit!"
