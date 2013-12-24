@@ -54,8 +54,10 @@ class LeapListener(Leap.Listener):
         
         #finger movement
         frame = controller.frame()
-
-        iBox = frame.interactionBox
+        if frame.pointables.is_empty and frame.gestures().is_empty:
+            return
+        
+        iBox = frame.interaction_box
         frnt_ptr = frame.pointables.frontmost
         normalized_pos = iBox.normalize_point(frnt_ptr.tip_position)
         
